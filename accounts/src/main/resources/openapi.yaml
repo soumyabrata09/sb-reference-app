@@ -1,0 +1,69 @@
+openapi: "3.0.0"
+info:
+  title: Accounts Installment Validation API
+servers:
+  url: http://localhost:8080/rest/api
+paths:
+  /installments/validate:
+    get:
+      summary: Validates Card and Customer for Installment Checks
+      operationId: getCardAndCustomerValidate
+      tags:
+        - istallmentsValidation
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardAndCustomerValidate'
+components:
+  schemas:
+    CardAndCustomerValidate:
+      type: object
+      properties:
+        cardInstallmentActive:
+          type: boolean
+        reasons:
+          type: array
+          items:
+            $ref: '#/components/schemas/CardInstallmentCheck'
+        customerValidation:
+          $ref: '#/components/schemas/CustomerValidationRto'
+    CustomerValidationRto:
+      type: object
+      properties:
+        customerInstallmentActive:
+          type: boolean
+        cardsWithInstallments:
+          type: array
+          items:
+            type: string
+        cardsWithActiveInstallments:
+          type: array
+          items:
+            type: string
+        reasons:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerInstallmentCheck'
+    CardValidationRto:
+      type: object
+      properties:
+        cardInstallmentActive:
+          type: boolean
+        reasons:
+          type: array
+          items:
+            $ref: '#/components/schemas/CardInstallmentCheck'
+    CustomerInstallmentCheck:
+      type: string
+      enum:
+        - CUSTOMER_NOT_ACTIVE
+        - CUSTOMER_PAYMENT_DUE
+    CardInstallmentCheck:
+      type: string
+      enum:
+        - CARD_NOT_VALID
+        - CARD_NOT_ACTIVE
+        - CARD_NOT_ELIGIBLE
